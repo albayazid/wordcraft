@@ -31,7 +31,15 @@ struct SymbolRun<'a> {
 
 impl<'a> SymbolRun<'a> {
     fn of(family: &'a str, r: &wordcraft_fonts::word::Resolved) -> Option<Self> {
-        wordcraft_doc::symbol_fonts::is_symbol_font(family).then_some(SymbolRun { family, installed: !r.substituted, face: r.face })
+        // Installed means the symbol font itself is present: an installed `w:altName` standing in
+        // for it must not make the run skip the Unicode remap — Word remaps whenever the
+        // requested font is missing, whatever face the run is drawn in (PR #2862 review). The
+        // gate and the resolution agree, so the face is the family's own exactly when this holds.
+        wordcraft_doc::symbol_fonts::is_symbol_font(family).then_some(SymbolRun {
+            family,
+            installed: wordcraft_fonts::word::substitutes_available(family),
+            face: r.face,
+        })
     }
 
     /// The character drawn for `c`.
@@ -907,12 +915,13 @@ impl<'a> Builder<'a> {
         let show = |c: char| sym.map_or(c, |m| m.show(c));
         let primary_cs = rc_cs.as_ref().map(|r| wordcraft_fonts::word::resolve(&lookup_family(self.env.doc, &r.font), r.bold, r.italic).face);
         // Chinese, Japanese and Korean characters use the run's East Asian font (`w:eastAsia`) when
-        // it is installed and has them.
+        // it is installed and has them — itself, or through the font table's `w:altName`, like the
+        // other font references in the run (#2702 review).
         let primary_ea = rc
             .font_ea
             .as_ref()
             .filter(|f| !f.eq_ignore_ascii_case(&rc.font) && text.chars().any(east_asian))
-            .map(|f| wordcraft_fonts::word::resolve(f, rc.bold, rc.italic))
+            .map(|f| wordcraft_fonts::word::resolve(&lookup_family(self.env.doc, f), rc.bold, rc.italic))
             .filter(|r| !r.substituted)
             .map(|r| r.face);
         // The levels by byte of `text`, from `lbase` on.
