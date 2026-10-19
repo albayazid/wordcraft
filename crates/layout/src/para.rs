@@ -37,7 +37,7 @@ impl<'a> SymbolRun<'a> {
         // gate and the resolution agree, so the face is the family's own exactly when this holds.
         wordcraft_doc::symbol_fonts::is_symbol_font(family).then_some(SymbolRun {
             family,
-            installed: wordcraft_fonts::word::substitutes_available(family),
+            installed: wordcraft_fonts::word::installed_as_itself(family),
             face: r.face,
         })
     }
