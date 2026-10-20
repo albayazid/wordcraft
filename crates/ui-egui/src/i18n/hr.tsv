@@ -306,6 +306,7 @@
 	Bullet Library	Knjižnica oznaka
 	Bullets	Oznake
 	By author	Po autoru
+	cm	cm
 	CONFIDENTIAL	POVJERLJIVO
 	Calendar	Kalendar
 	Can't be deleted	Ne može se izbrisati
@@ -1335,6 +1336,7 @@ template	Letter	Pismo
 	Minus Equal	Minus jednako
 	Mirror indents	Zrcali uvlake
 	Mirrored	Zrcaljeno
+	mm	mm
 	Model	Model
 	Models	Modeli
 	Moderate	Umjereno
@@ -1368,6 +1370,7 @@ template	Letter	Pismo
 	Multilevel List Library	Biblioteka višerazinskih popisa
 	Article I.	Članak I.
 	Chapter 1	Poglavlje 1
+	pi	pi
 	Section 1.01	Odjeljak 1.01
 	Multiple Pages	Više stranica
 	Name	Naziv
