@@ -5239,6 +5239,7 @@ dependencies = [
  "unicode-bidi",
  "wordcraft-doc",
  "wordcraft-geom",
+ "wordcraft-layout",
  "zeroize",
  "zip",
 ]
